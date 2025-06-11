@@ -93,14 +93,13 @@ void loop() {
 
 
 ---
-
-## 📷 Wiring Diagrams
+### 📷 Wiring Diagrams
 
 **LoRa to Arduino Pro Mini:**  
 ![LoRa to Arduino](images/Lora Ra01 Arduino Mini.jpg)
 
 **LoRa to Raspberry Pi 3:**  
-![LoRa to Raspberry Pi](images/Raspberry pi3.jpg)
+![LoRa to Raspberry Pi](images/raspberry_pi3.jpg)
 
 **Sending Example:**  
-![Sending](images/Send.png)
+![Sending](images/send.png)
