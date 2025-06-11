@@ -96,7 +96,7 @@ void loop() {
 ### 📷 Wiring Diagrams
 
 **LoRa to Arduino Pro Mini:**  
-![LoRa to Arduino](images/Lora Ra01 Arduino Mini.jpg)
+![LoRa to Arduino](images/lora_ra01_arduino_mini.jpg)
 
 **LoRa to Raspberry Pi 3:**  
 ![LoRa to Raspberry Pi](images/raspberry_pi3.jpg)
