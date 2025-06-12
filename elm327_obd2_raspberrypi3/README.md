@@ -12,9 +12,13 @@ sudo apt-get install bluetooth bluez blueman python3-serial
 2. 🔁 Pair your ELM327 (first time only):
 
 bluetoothctl
+
 power on
+
 agent on
+
 default-agent
+
 scan on
 
 🕐 After 30–60 seconds, your device should appear (e.g., 00:1D:A5:68:98:8A). Then:
@@ -36,9 +40,13 @@ Or just use the helper script:
 4. 🔄 Reset Bluetooth if needed:
 
 sudo systemctl restart bluetooth
+
 sudo service bluetooth restart
+
 bluetoothctl
+
 power off
+
 power on
 
 If still stuck:
