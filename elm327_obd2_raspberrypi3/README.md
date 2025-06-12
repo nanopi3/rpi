@@ -1,61 +1,155 @@
 # ELM327 Vehicle Data via python-OBD
 
-This project connects a Raspberry Pi (or Linux system) to an ELM327 adapter to read real-time vehicle data using the OBD-II protocol.
-🇬🇧 English – Overview and Usage
+ELM327 OBD-II Raspberry Pi Project – Overview & Setup
 🚗 Project Overview
 
-This project demonstrates how to connect a Raspberry Pi (or any Linux-based system) to a vehicle’s OBD-II interface using an ELM327 adapter (Bluetooth, USB, or WiFi). The connection allows you to read real-time engine data such as RPM, speed, coolant temperature, throttle position, and more using Python and the python-OBD library.
-🔧 How It Works
+This project shows how to connect a Raspberry Pi (or any Linux-based system) to a vehicle’s OBD-II port using an ELM327 adapter (Bluetooth-based, using the BCM43430A1 chip). It enables reading live vehicle data like RPM, speed, coolant temperature, throttle position, etc., via Python and the python-OBD library.
+🔧 Step-by-Step Setup
+1. 🔌 Install required packages:
 
-    The ELM327 adapter is plugged into your vehicle's OBD-II port.
+sudo apt-get install bluetooth bluez blueman python3-serial
 
-    The Raspberry Pi communicates with the ELM327 via Bluetooth (or optionally via USB/WiFi).
+2. 🔁 Pair your ELM327 (first time only):
 
-    The Python script queries the ECU using standard OBD-II PID commands.
+bluetoothctl
+power on
+agent on
+default-agent
+scan on
 
-    Live data is displayed in the terminal or optionally saved/logged.
+🕐 After 30–60 seconds, your device should appear (e.g., 00:1D:A5:68:98:8A). Then:
+
+remove 00:1D:A5:68:98:8A
+pair 00:1D:A5:68:98:8A
+trust 00:1D:A5:68:98:8A
+connect 00:1D:A5:68:98:8A
+quit
+
+3. 🔗 Bind ELM327 to serial port:
+
+sudo rfcomm bind rfcomm0 00:1D:A5:68:98:8A
+
+Or just use the helper script:
+
+./elm327_connect.sh
+
+4. 🔄 Reset Bluetooth if needed:
+
+sudo systemctl restart bluetooth
+sudo service bluetooth restart
+bluetoothctl
+power off
+power on
+
+If still stuck:
+
+ps aux | grep bluetooth
+sudo kill -9 <PID>
+sudo systemctl restart bluetooth
+
+Then repeat pairing.
+5. 🔋 Important Notes:
+
+    Turn the vehicle ignition to ON (ACC mode).
+
+    Replug the ELM327 adapter before scanning.
+
+    Wait 20–40 seconds after ignition before running scripts.
+
+🐍 Run Python environment:
+
+source ~/obd-env/bin/activate
+pip install colorama
+python3 read_obd_data.py
 
 🧰 Use Cases
 
-    Diagnose engine performance in real-time
+    Real-time vehicle diagnostics
 
-    Monitor RPM, temperature, and voltage
+    Monitor RPM, temperature, voltage
 
-    Build a car dashboard using Raspberry Pi
+    Build digital car dashboards with Raspberry Pi
 
-    Educational tools for automotive electronics
+    Automotive learning & prototyping
 
-    Remote diagnostics or data logging for fleet vehicles
+    Remote fleet diagnostics
 
-    ✅ Works with most vehicles manufactured after 2001 (Europe) or 1996 (USA) that support OBD-II.
-
-🇩🇪 Deutsch – Überblick und Verwendung
+✅ Compatible with most OBD-II vehicles after 2001 (EU) / 1996 (US).
+🇩🇪 ELM327 OBD-II Raspberry Pi Projekt – Übersicht & Einrichtung
 🚗 Projektübersicht
 
-Dieses Projekt zeigt, wie man ein Raspberry Pi (oder ein anderes Linux-System) über einen ELM327-Adapter (Bluetooth, USB oder WLAN) mit dem OBD-II-Anschluss eines Fahrzeugs verbindet. Damit lassen sich in Echtzeit Fahrzeugdaten wie Drehzahl (RPM), Geschwindigkeit, Motortemperatur, Drosselklappenstellung usw. mit Python und der python-OBD-Bibliothek auslesen.
-🔧 Funktionsweise
+Dieses Projekt zeigt, wie man ein Raspberry Pi mit einem Fahrzeug über einen ELM327 Bluetooth-Adapter (BCM43430A1) und die OBD-II-Schnittstelle verbindet. Damit können Live-Fahrzeugdaten wie Drehzahl, Geschwindigkeit, Kühlmitteltemperatur, Drosselklappenstellung usw. mit Python und der python-OBD-Bibliothek ausgelesen werden.
+🔧 Schritt-für-Schritt Einrichtung
+1. ❗ Notwendige Pakete installieren:
 
-    Der ELM327-Adapter wird in die OBD-II-Schnittstelle des Fahrzeugs gesteckt.
+sudo apt-get install bluetooth bluez blueman python3-serial
 
-    Das Raspberry Pi kommuniziert über Bluetooth (oder USB/WLAN) mit dem ELM327.
+2. 📶 ELM327 zum ersten Mal koppeln:
 
-    Ein Python-Skript sendet OBD-II-Befehle (PIDs) an das Steuergerät.
+bluetoothctl
+power on
+agent on
+default-agent
+scan on
 
-    Die Fahrzeugdaten werden im Terminal angezeigt oder gespeichert.
+🕐 Nach 30–60 Sekunden erscheint dein Gerät (z. B. 00:1D:A5:68:98:8A):
 
-🧰 Anwendungsmöglichkeiten
+remove 00:1D:A5:68:98:8A
+pair 00:1D:A5:68:98:8A
+trust 00:1D:A5:68:98:8A
+connect 00:1D:A5:68:98:8A
+quit
 
-    Live-Diagnose von Fahrzeugdaten
+3. 🔗 Mit serieller Schnittstelle verbinden:
 
-    Überwachung von RPM, Temperatur und Spannung
+sudo rfcomm bind rfcomm0 00:1D:A5:68:98:8A
 
-    Bau eines digitalen Fahrzeug-Dashboards mit Raspberry Pi
+Oder einfach:
 
-    Lernprojekte im Bereich Automobilelektronik
+./elm327_connect.sh
 
-    Fernwartung und Datenaufzeichnung in Flottenfahrzeugen
+4. 🔁 Bluetooth zurücksetzen (falls nötig):
 
-    ✅ Kompatibel mit den meisten Fahrzeugen ab Baujahr 2001 (Europa) bzw. 1996 (USA), die OBD-II unterstützen
+sudo systemctl restart bluetooth
+sudo service bluetooth restart
+bluetoothctl
+power off
+power on
+
+Falls weiterhin keine Verbindung:
+
+ps aux | grep bluetooth
+sudo kill -9 <PID>
+sudo systemctl restart bluetooth
+
+Dann erneut koppeln.
+5. ❗ Wichtig:
+
+    Zündung des Fahrzeugs auf ON / ACC stellen.
+
+    Adapter einmal abziehen und erneut einstecken.
+
+    Warte 20–40 Sekunden nach dem Einschalten, bevor du weiterarbeitest.
+
+🐍 Python-Umgebung starten:
+
+source ~/obd-env/bin/activate
+pip install colorama
+python3 read_obd_data.py
+
+🧰 Anwendungsfälle
+
+    Fahrzeugdiagnose in Echtzeit
+
+    Überwachung von RPM, Temperatur, Spannung
+
+    Erstellung eines digitalen Dashboards mit Raspberry Pi
+
+    Lernprojekte im Bereich Kfz-Elektronik
+
+    Ferndiagnose für Fahrzeugflotten
+
+✅ Kompatibel mit den meisten OBD-II-Fahrzeugen ab Baujahr 2001 (EU) bzw. 1996 (USA).
 ## 🔌 Supported OBD-II Parameters (Based on Your Vehicle)
 
 | Parameter Name            | OBD-II PID | Description                          |
