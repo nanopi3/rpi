@@ -83,10 +83,10 @@ python3 snake_oled.py
 Controls:
 - D-Pad → Move
 - Start → Pause/Resume
+![Alt text](images/terminal.png)
+![Alt text](images/schematic.png)
+![Alt text](images/oled.png)
 
-- `images/schematic.jpg` 
-- `images/oled.jpg`
-- `images/terminal.png`
 
 ## 💡 Industrial Ideas and Projects
 
@@ -99,3 +99,4 @@ Controls:
 | 🚘 Car diagnostics                 | Extend with OBD-II adapter for RPM, temp display |
 | 🛰️ Rover navigation                | Xbox pad to control and read sensors |
 | 📚 Educational tool                | Teach Python, GPIO, and game logic |
+
