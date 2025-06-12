@@ -52,7 +52,9 @@ power on
 If still stuck:
 
 ps aux | grep bluetooth
+
 sudo kill -9 <PID>
+
 sudo systemctl restart bluetooth
 
 Then repeat pairing.
@@ -67,7 +69,9 @@ Then repeat pairing.
 🐍 Run Python environment:
 
 source ~/obd-env/bin/activate
+
 pip install colorama
+
 python3 read_obd_data.py
 
 🧰 Use Cases
@@ -95,9 +99,13 @@ sudo apt-get install bluetooth bluez blueman python3-serial
 2. 📶 ELM327 zum ersten Mal koppeln:
 
 bluetoothctl
+
 power on
+
 agent on
+
 default-agent
+
 scan on
 
 🕐 Nach 30–60 Sekunden erscheint dein Gerät (z. B. 00:1D:A5:68:98:8A):
@@ -119,15 +127,21 @@ Oder einfach:
 4. 🔁 Bluetooth zurücksetzen (falls nötig):
 
 sudo systemctl restart bluetooth
+
 sudo service bluetooth restart
+
 bluetoothctl
+
 power off
+
 power on
 
 Falls weiterhin keine Verbindung:
 
 ps aux | grep bluetooth
+
 sudo kill -9 <PID>
+
 sudo systemctl restart bluetooth
 
 Dann erneut koppeln.
@@ -142,8 +156,11 @@ Dann erneut koppeln.
 🐍 Python-Umgebung starten:
 
 source ~/obd-env/bin/activate
+
 pip install colorama
+
 python3 read_obd_data.py
+
 
 🧰 Anwendungsfälle
 
