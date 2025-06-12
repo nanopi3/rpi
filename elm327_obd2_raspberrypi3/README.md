@@ -1,10 +1,13 @@
 # ELM327 Vehicle Data via python-OBD
 
 ELM327 OBD-II Raspberry Pi Project – Overview & Setup
+
 🚗 Project Overview
 
 This project shows how to connect a Raspberry Pi (or any Linux-based system) to a vehicle’s OBD-II port using an ELM327 adapter (Bluetooth-based, using the BCM43430A1 chip). It enables reading live vehicle data like RPM, speed, coolant temperature, throttle position, etc., via Python and the python-OBD library.
+
 🔧 Step-by-Step Setup
+
 1. 🔌 Install required packages:
 
 sudo apt-get install bluetooth bluez blueman python3-serial
@@ -12,18 +15,27 @@ sudo apt-get install bluetooth bluez blueman python3-serial
 2. 🔁 Pair your ELM327 (first time only):
 
 bluetoothctl
+
 power on
+
 agent on
+
 default-agent
+
 scan on
 
 🕐 After 30–60 seconds, your device should appear (e.g., 00:1D:A5:68:98:8A). Then:
 
 remove 00:1D:A5:68:98:8A
+
 pair 00:1D:A5:68:98:8A
+
 trust 00:1D:A5:68:98:8A
+
 connect 00:1D:A5:68:98:8A
+
 quit
+
 
 3. 🔗 Bind ELM327 to serial port:
 
@@ -36,18 +48,25 @@ Or just use the helper script:
 4. 🔄 Reset Bluetooth if needed:
 
 sudo systemctl restart bluetooth
+
 sudo service bluetooth restart
+
 bluetoothctl
+
 power off
+
 power on
 
 If still stuck:
 
 ps aux | grep bluetooth
+
 sudo kill -9 <PID>
+
 sudo systemctl restart bluetooth
 
 Then repeat pairing.
+
 5. 🔋 Important Notes:
 
     Turn the vehicle ignition to ON (ACC mode).
@@ -59,7 +78,9 @@ Then repeat pairing.
 🐍 Run Python environment:
 
 source ~/obd-env/bin/activate
+
 pip install colorama
+
 python3 read_obd_data.py
 
 🧰 Use Cases
@@ -75,11 +96,14 @@ python3 read_obd_data.py
     Remote fleet diagnostics
 
 ✅ Compatible with most OBD-II vehicles after 2001 (EU) / 1996 (US).
+
 🇩🇪 ELM327 OBD-II Raspberry Pi Projekt – Übersicht & Einrichtung
+
 🚗 Projektübersicht
 
 Dieses Projekt zeigt, wie man ein Raspberry Pi mit einem Fahrzeug über einen ELM327 Bluetooth-Adapter (BCM43430A1) und die OBD-II-Schnittstelle verbindet. Damit können Live-Fahrzeugdaten wie Drehzahl, Geschwindigkeit, Kühlmitteltemperatur, Drosselklappenstellung usw. mit Python und der python-OBD-Bibliothek ausgelesen werden.
 🔧 Schritt-für-Schritt Einrichtung
+
 1. ❗ Notwendige Pakete installieren:
 
 sudo apt-get install bluetooth bluez blueman python3-serial
@@ -87,17 +111,25 @@ sudo apt-get install bluetooth bluez blueman python3-serial
 2. 📶 ELM327 zum ersten Mal koppeln:
 
 bluetoothctl
+
 power on
+
 agent on
+
 default-agent
+
 scan on
 
 🕐 Nach 30–60 Sekunden erscheint dein Gerät (z. B. 00:1D:A5:68:98:8A):
 
 remove 00:1D:A5:68:98:8A
+
 pair 00:1D:A5:68:98:8A
+
 trust 00:1D:A5:68:98:8A
+
 connect 00:1D:A5:68:98:8A
+
 quit
 
 3. 🔗 Mit serieller Schnittstelle verbinden:
@@ -111,18 +143,25 @@ Oder einfach:
 4. 🔁 Bluetooth zurücksetzen (falls nötig):
 
 sudo systemctl restart bluetooth
+
 sudo service bluetooth restart
+
 bluetoothctl
+
 power off
+
 power on
 
 Falls weiterhin keine Verbindung:
 
 ps aux | grep bluetooth
+
 sudo kill -9 <PID>
+
 sudo systemctl restart bluetooth
 
 Dann erneut koppeln.
+
 5. ❗ Wichtig:
 
     Zündung des Fahrzeugs auf ON / ACC stellen.
