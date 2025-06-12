@@ -84,8 +84,8 @@ Controls:
 - D-Pad → Move
 - Start → Pause/Resume
 ![Alt text](images/terminal.png)
-![Alt text](images/schematic.png)
-![Alt text](images/oled.png)
+![Alt text](images/schematic.jpg)
+![Alt text](images/oled.jpg)
 
 
 ## 💡 Industrial Ideas and Projects
