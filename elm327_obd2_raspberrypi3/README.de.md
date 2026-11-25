@@ -27,7 +27,7 @@ python supported_cmd.py
 python read_obd_data.py
 ```
 
-Alternativ prüft `./elm327_connect.sh <ADAPTER_MAC>` die Adresse und belegt keine bereits vorhandene `/dev/rfcomm0`-Schnittstelle. Die Kopplung erfolgt separat.
+Alternativ prüft `bash elm327_connect.sh <ADAPTER_MAC>` die Adresse und belegt keine bereits vorhandene `/dev/rfcomm0`-Schnittstelle. Die Kopplung erfolgt separat.
 
 ## Fehlersuche und Grenzen
 

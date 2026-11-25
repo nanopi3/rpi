@@ -50,7 +50,7 @@ Bind the serial device (check first that `/dev/rfcomm0` is not already in use):
 sudo rfcomm bind rfcomm0 <ADAPTER_MAC>
 ```
 
-Alternatively, `./elm327_connect.sh <ADAPTER_MAC>` checks the address and refuses to overwrite an existing `/dev/rfcomm0`. Pairing is a separate manual step. The command may require sudo and Bluetooth access. Release the binding with `sudo rfcomm release rfcomm0` when you have finished, provided it is not being used by another application.
+Alternatively, `bash elm327_connect.sh <ADAPTER_MAC>` checks the address and refuses to overwrite an existing `/dev/rfcomm0`. Pairing is a separate manual step. The command may require sudo and Bluetooth access. Release the binding with `sudo rfcomm release rfcomm0` when you have finished, provided it is not being used by another application.
 
 ## Run
 
