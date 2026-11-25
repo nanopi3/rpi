@@ -1,0 +1,25 @@
+name: Syntax checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check Python syntax
+        run: python3 -m compileall -q camera-stream elm327_obd2_raspberrypi3 lora_arduino_pi_project raspberry_pi_xbox_snake_oled
+      - name: Check shell syntax and invalid adapter address
+        shell: bash
+        run: |
+          bash -n elm327_obd2_raspberrypi3/elm327_connect.sh
+          set +e
+          bash elm327_obd2_raspberrypi3/elm327_connect.sh invalid
+          status=$?
+          set -e
+          test "$status" -eq 2

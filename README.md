@@ -1,45 +1,14 @@
-# 👋 Welcome to Ehsan's Tech Projects
+# Raspberry Pi and embedded Linux experiments
 
-## 🇬🇧 Creative Projects with Raspberry Pi, Arduino & IoT
+Small Python and hardware experiments involving Raspberry Pi, cameras, Bluetooth OBD-II and LoRa. Each directory is independent; hardware and library versions matter, and the projects have not been validated on every current Raspberry Pi OS release.
 
-Hi! I'm **Ehsan**, an electrical engineer (B.Sc.), deeply passionate about the world of **Raspberry Pi**, **Arduino**, and creative hacking — working on semi-industrial tech projects and smart systems.
+| Project | Contents | Status |
+| --- | --- | --- |
+| [ELM327 OBD-II](elm327_obd2_raspberrypi3/) | Bluetooth serial connection and Python vehicle-data queries | Requires an ELM327 adapter and a compatible vehicle |
+| [Camera stream](camera-stream/) | Flask MJPEG stream using Picamera2 and OpenCV filters | Requires a compatible Pi camera; the web server has no authentication |
+| [LoRa receiver](lora_arduino_pi_project/) | Raspberry Pi SX127x receiver and an Arduino sender example | Prototype: library API and wiring need verification before use |
+| [Controller and OLED experiment](raspberry_pi_xbox_snake_oled/) | Controller input example and OLED wiring notes | Snake game is a placeholder, not an implemented game |
 
-This GitHub contains a variety of my work and experiments in areas such as:
-- 🧠 Embedded Systems & Microcontrollers  
-- 📡 IoT Communications (LoRa, GPRS, GPS)  
-- 📷 Real-Time Image Processing  
-- 🔊 Sound Recognition & Audio Processing  
-- 🌐 Remote Control & Automation  
-- 🧪 Sensor-based systems (Temperature, Motion, Light, etc.)
+Each project README describes its requirements, setup and limitations. The photographs in the project directories illustrate hardware setups; they are not automated test results. No physical hardware tests were run as part of this documentation update.
 
-💡 All projects are hands-on, testable, and include real hardware implementations.
-
-### 🤝 Suggestions Welcome!
-If you have any project idea, enhancement, or feedback — feel free to share it! I regularly check and update based on your suggestions.
-
----
-
-## 🇩🇪 Kreative Technikprojekte mit Raspberry Pi, Arduino & IoT
-
-Hallo! Ich bin **Ehsan**, Elektroingenieur (B.Sc.), leidenschaftlich interessiert an **Raspberry Pi**, **Arduino** und technischen Hacks – ich arbeite an halb-industriellen Projekten mit intelligenten Systemen.
-
-In diesem GitHub-Account findest du verschiedene Projekte und Experimente rund um:
-- 🧠 Eingebettete Systeme & Mikrocontroller  
-- 📡 IoT-Kommunikation (LoRa, GPRS, GPS)  
-- 📷 Bildverarbeitung in Echtzeit  
-- 🔊 Audio-Analyse & Sprachverarbeitung  
-- 🌐 Fernsteuerung & Automatisierung  
-- 🧪 Sensorbasierte Systeme (Temperatur, Bewegung, Licht usw.)
-
-💡 Alle Projekte sind praktisch getestet und auf echter Hardware umgesetzt.
-
-### 🤝 Vorschläge sind willkommen!
-Wenn du Projektideen oder Feedback hast, teile sie gerne mit mir! Ich prüfe sie regelmäßig und setze interessante Vorschläge um.
-
----
-
-## 📬 Contact
-
-Feel free to reach out or follow my updates on GitHub:  
-**GitHub:** [@nanopi3](https://github.com/nanopi3)
-
+Maintained by [Ehsan Mohebbi](https://github.com/nanopi3). The repository has no declared license; ask the owner before reusing the code.
