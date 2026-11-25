@@ -1,199 +1,75 @@
-# ELM327 Vehicle Data via python-OBD
+# ELM327 vehicle data on Raspberry Pi
 
-ELM327 OBD-II Raspberry Pi Project – Overview & Setup
+[Deutsch](README.de.md)
 
-🚗 Project Overview
+This experiment reads OBD-II commands through a Bluetooth ELM327-compatible adapter on a Raspberry Pi running Linux. `read_obd_data.py` queries the vehicle repeatedly with [python-OBD](https://python-obd.readthedocs.io/); `supported_cmd.py` lists commands detected by the library. The scripts use `/dev/rfcomm0`.
 
-This project shows how to connect a Raspberry Pi (or any Linux-based system) to a vehicle’s OBD-II port using an ELM327 adapter (Bluetooth-based, using the BCM43430A1 chip). It enables reading live vehicle data like RPM, speed, coolant temperature, throttle position, etc., via Python and the python-OBD library.
+## Requirements
 
-🔧 Step-by-Step Setup
+- Raspberry Pi 3 and Bluetooth ELM327-compatible adapter, as documented in the original project; other hardware is not verified here.
+- A vehicle and adapter that support the requested OBD-II commands. Availability varies by vehicle, ignition state and adapter.
+- Linux with BlueZ, `bluetoothctl` and `rfcomm`, plus Python 3, `python-OBD` (`obd`) and `colorama`.
 
-1. 🔌 Install required packages:
+On a Debian-based Raspberry Pi OS, install the OS packages and create an environment:
 
-sudo apt-get install bluetooth bluez blueman python3-serial
+```bash
+sudo apt update
+sudo apt install bluetooth bluez python3-venv
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install obd colorama
+```
 
-2. 🔁 Pair your ELM327 (first time only):
+Package availability and Bluetooth permissions depend on your OS version. Do not operate the computer while driving.
 
+## Pair and connect
+
+Connect the adapter to the vehicle and enable its ignition as required by the adapter. Find **your own adapter address** with `bluetoothctl`:
+
+```text
 bluetoothctl
-
 power on
-
 agent on
-
 default-agent
-
 scan on
+```
 
-🕐 After 30–60 seconds, your device should appear (e.g., 00:1D:A5:68:98:8A). Then:
+After discovery, turn scanning off and replace `<ADAPTER_MAC>` below with the Bluetooth address reported for your adapter. Complete any pairing prompt required by the adapter.
 
-remove 00:1D:A5:68:98:8A
-
-pair 00:1D:A5:68:98:8A
-
-trust 00:1D:A5:68:98:8A
-
-connect 00:1D:A5:68:98:8A
-
+```text
+scan off
+pair <ADAPTER_MAC>
+trust <ADAPTER_MAC>
+connect <ADAPTER_MAC>
 quit
+```
 
+Bind the serial device (check first that `/dev/rfcomm0` is not already in use):
 
-3. 🔗 Bind ELM327 to serial port:
+```bash
+sudo rfcomm bind rfcomm0 <ADAPTER_MAC>
+```
 
-sudo rfcomm bind rfcomm0 00:1D:A5:68:98:8A
+Alternatively, `./elm327_connect.sh <ADAPTER_MAC>` checks the address and refuses to overwrite an existing `/dev/rfcomm0`. Pairing is a separate manual step. The command may require sudo and Bluetooth access. Release the binding with `sudo rfcomm release rfcomm0` when you have finished, provided it is not being used by another application.
 
-Or just use the helper script:
+## Run
 
-./elm327_connect.sh
+From this directory, with the environment active:
 
-4. 🔄 Reset Bluetooth if needed:
+```bash
+python supported_cmd.py
+python read_obd_data.py
+```
 
-sudo systemctl restart bluetooth
+The reader prints a label and value when a query succeeds, or `Not available` for an unsupported or empty response. The code requests RPM, speed, coolant temperature, control-module voltage, throttle position, engine load, intake pressure and temperature, mass airflow, timing advance and fuel-system status. This is a list of **queries attempted by the code**, not a guarantee that a vehicle supports them.
 
-sudo service bluetooth restart
+## Troubleshooting
 
-bluetoothctl
+- Check `systemctl status bluetooth`, `bluetoothctl devices` and `ls -l /dev/rfcomm0`.
+- Check the adapter's pairing instructions, ignition state, Bluetooth range and serial-device permissions.
+- If a serial binding is stale, first identify the application using it; release it only when safe. Do not kill Bluetooth processes blindly.
+- A connected adapter does not imply that every PID is available. Run `supported_cmd.py` to inspect the detected set.
 
-power off
+![ELM327 adapter and Raspberry Pi wiring](images/elm327_pi3.jpg)
 
-power on
-
-If still stuck:
-
-ps aux | grep bluetooth
-
-sudo kill -9 <PID>
-
-sudo systemctl restart bluetooth
-
-Then repeat pairing.
-
-5. 🔋 Important Notes:
-
-    Turn the vehicle ignition to ON (ACC mode).
-
-    Replug the ELM327 adapter before scanning.
-
-    Wait 20–40 seconds after ignition before running scripts.
-
-🐍 Run Python environment:
-
-source ~/obd-env/bin/activate
-
-pip install colorama
-
-python3 read_obd_data.py
-
-🧰 Use Cases
-
-    Real-time vehicle diagnostics
-
-    Monitor RPM, temperature, voltage
-
-    Build digital car dashboards with Raspberry Pi
-
-    Automotive learning & prototyping
-
-    Remote fleet diagnostics
-
-✅ Compatible with most OBD-II vehicles after 2001 (EU) / 1996 (US).
-
-🇩🇪 ELM327 OBD-II Raspberry Pi Projekt – Übersicht & Einrichtung
-
-🚗 Projektübersicht
-
-Dieses Projekt zeigt, wie man ein Raspberry Pi mit einem Fahrzeug über einen ELM327 Bluetooth-Adapter (BCM43430A1) und die OBD-II-Schnittstelle verbindet. Damit können Live-Fahrzeugdaten wie Drehzahl, Geschwindigkeit, Kühlmitteltemperatur, Drosselklappenstellung usw. mit Python und der python-OBD-Bibliothek ausgelesen werden.
-🔧 Schritt-für-Schritt Einrichtung
-
-1. ❗ Notwendige Pakete installieren:
-
-sudo apt-get install bluetooth bluez blueman python3-serial
-
-2. 📶 ELM327 zum ersten Mal koppeln:
-
-bluetoothctl
-
-power on
-
-agent on
-
-default-agent
-
-scan on
-
-🕐 Nach 30–60 Sekunden erscheint dein Gerät (z. B. 00:1D:A5:68:98:8A):
-
-remove 00:1D:A5:68:98:8A
-
-pair 00:1D:A5:68:98:8A
-
-trust 00:1D:A5:68:98:8A
-
-connect 00:1D:A5:68:98:8A
-
-quit
-
-3. 🔗 Mit serieller Schnittstelle verbinden:
-
-sudo rfcomm bind rfcomm0 00:1D:A5:68:98:8A
-
-Oder einfach:
-
-./elm327_connect.sh
-
-4. 🔁 Bluetooth zurücksetzen (falls nötig):
-
-sudo systemctl restart bluetooth
-
-sudo service bluetooth restart
-
-bluetoothctl
-
-power off
-
-power on
-
-Falls weiterhin keine Verbindung:
-
-ps aux | grep bluetooth
-
-sudo kill -9 <PID>
-
-sudo systemctl restart bluetooth
-
-Dann erneut koppeln.
-
-5. ❗ Wichtig:
-
-    Zündung des Fahrzeugs auf ON / ACC stellen.
-
-    Adapter einmal abziehen und erneut einstecken.
-
-    Warte 20–40 Sekunden nach dem Einschalten, bevor du weiterarbeitest.
-
-✅ Kompatibel mit den meisten OBD-II-Fahrzeugen ab Baujahr 2001 (EU) bzw. 1996 (USA).
-## 🔌 Supported OBD-II Parameters (Based on Your Vehicle)
-
-| Parameter Name            | OBD-II PID | Description                          |
-|--------------------------|------------|--------------------------------------|
-| RPM                      | 010C       | Engine Revolutions Per Minute        |
-| SPEED                    | 010D       | Vehicle Speed (km/h)                 |
-| COOLANT_TEMP             | 0105       | Engine Coolant Temperature (°C)      |
-| THROTTLE_POS             | 0111       | Throttle Position (%)                |
-| INTAKE_PRESSURE          | 010B       | Intake Manifold Pressure (kPa)       |
-| INTAKE_TEMP              | 010F       | Intake Air Temperature (°C)          |
-| MAF                      | 0110       | Mass Air Flow Rate                   |
-| TIMING_ADVANCE           | 010E       | Ignition Timing Advance              |
-| FUEL_STATUS              | 0103       | Current Fuel System Status           |
-| CONTROL_MODULE_VOLTAGE   | 0142       | ECU Voltage Supply (V)               |
-
-> ✅ These are supported on your Mazda when ignition is ON.
-
-## 🛠 Usage Instructions
-
-1. Run `elm327_connect.sh` to bind the ELM327 to `/dev/rfcomm0`
-2. Run `python3 supported_cmd.py` to view available PIDs
-3. Run `python3 read_obd_data.py` to start real-time monitoring
-
-![SSH Logs](images/bt.png)
-![schematic](images/elm327_pi3.jpg)
-
+The examples have not been retested on physical hardware for this update.
