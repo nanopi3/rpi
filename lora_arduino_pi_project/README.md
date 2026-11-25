@@ -1,64 +1,26 @@
-# LoRa Communication Between Arduino Pro Mini and Raspberry Pi 3
+# LoRa receiver experiment: Raspberry Pi and Arduino
 
-This project demonstrates wireless communication between an Arduino Pro Mini (using SX1278/LoRa module) and a Raspberry Pi 3 using LoRa (433 MHz).
+This directory contains a Python SX127x receiver for a Raspberry Pi and an Arduino sender sketch below. The intended frequency is 433 MHz. The receiver source uses `LoRaRF`, SPI and GPIO; successful operation depends on a compatible module, matching radio settings, wiring and local radio regulations.
 
-## 📡 Hardware
+## Important compatibility limits
 
-### Sender - Arduino Pro Mini + LoRa (SX1278)
+The original `requirements.txt` lists `raspi-lora`, while the Python script imports `LoRaRF`. The current upstream `LoRaRF` API requires constructor arguments and differs from the `SX127x()`, `setPins()` and `setSpi()` calls in this script. **The compatible library/version has not been established**, so the existing installation instructions cannot be treated as tested. See the [LoRaRF project](https://github.com/chandrawi/LoRaRF-Python) and its current examples before adapting the script.
 
-| LoRa Pin | Arduino Pro Mini |
-|----------|------------------|
-| VCC      | 3.3V             |
-| GND      | GND              |
-| TXD      | D2 (Software RX) |
-| RXD      | D3 (Software TX) |
-| M0       | GND              |
-| M1       | GND              |
-| MOSI     | D11              |
-| MISO     | D12              |
-| SCK      | D13              |
-| NSS (CS) | D10              |
-| RESET    | D9               |
-| DIO0     | D2               |
+The original wiring notes conflict: the receiver comments name RESET GPIO22 while the old table mapped RESET to physical pin 22 (GPIO25); the Arduino table also assigned D2 to both software serial and DIO0. Verify the exact module and library pin numbering before wiring. The code configures NSS 8, RESET 22 and DIO0 4, but this has not been validated against physical hardware here. Some LoRa boards expose SPI, others a serial interface; do not assume the same wiring applies to both.
 
-### Receiver - Raspberry Pi 3 + LoRa (SX1278)
+## Receiver
 
-| LoRa Pin | Raspberry Pi 3  | Physical Pin |
-|----------|------------------|--------------|
-| VCC      | 3.3V             | Pin 1        |
-| GND      | GND              | Pin 6        |
-| TXD      | GPIO15 (RX)      | Pin 10       |
-| RXD      | GPIO14 (TX)      | Pin 8        |
-| MOSI     | GPIO10           | Pin 19       |
-| MISO     | GPIO9            | Pin 21       |
-| SCK      | GPIO11           | Pin 23       |
-| NSS      | GPIO8 (CE0)      | Pin 24       |
-| RESET    | GPIO25           | Pin 22       |
-| DIO0     | GPIO4            | Pin 7        |
-
-## 🛠️ Installation
-
-```bash
-pip install raspi-lora
-```
-
-## ▶️ Running the Code
-
-Activate your virtual environment if necessary:
-
-```bash
-source ~/odoo-venv/bin/activate
-```
-
-Then run the script:
+After resolving library compatibility, enabling SPI and checking wiring, the intended command from this directory is:
 
 ```bash
 python3 lora_receiver_pi3.py
 ```
 
----
+The script intends to print received UTF-8 packets. Do not expect it to run with the current upstream API without adaptation. The original `requirements.txt` is retained for historical context, not as a verified installation recipe.
 
-## 📤 Arduino Sender Code
+## Arduino sender example
+
+The following is the sender sketch preserved from the original documentation. It requires the Arduino SPI and LoRa libraries, suitable wiring and matching radio settings. It has not been retested for this update.
 
 ```cpp
 #include <SPI.h>
@@ -71,14 +33,11 @@ python3 lora_receiver_pi3.py
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-
   LoRa.setPins(LORA_SS, LORA_RST, LORA_DIO0);
-
   if (!LoRa.begin(433E6)) {
     Serial.println("LoRa init failed. Check your connections.");
     while (true);
   }
-
   Serial.println("LoRa init successful!");
 }
 
@@ -91,15 +50,10 @@ void loop() {
 }
 ```
 
+## Historical illustrations
 
----
-### 📷 Wiring Diagrams
+The images document a previous setup; verify their pin labels against the actual components before connecting power.
 
-**LoRa to Arduino Pro Mini:**  
-![LoRa to Arduino](images/lora_ra01_arduino_mini.jpg)
-
-**LoRa to Raspberry Pi 3:**  
-![LoRa to Raspberry Pi](images/raspberry_pi3.jpg)
-
-**Sending Example:**  
-![Sending](images/send.png)
+![Historical Arduino and LoRa wiring](images/lora_ra01_arduino_mini.jpg)
+![Historical Raspberry Pi and LoRa wiring](images/raspberry_pi3.jpg)
+![Example sender display](images/send.png)
